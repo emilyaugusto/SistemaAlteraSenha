@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Senhas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Painel de Senhas Recebidas</h2>
+  <div id="senhaContainer">Carregando...</div>
+
+  <script>
+    async function fetchSenha() {
+      const res = await fetch('/api/senha');
+      const data = await res.json();
+      document.getElementById('senhaContainer').innerText = data.senha || 'Nenhuma senha recebida ainda.';
+    }
+
+    setInterval(fetchSenha, 3000);
+    fetchSenha();
+  </script>
+</body>
+</html>
