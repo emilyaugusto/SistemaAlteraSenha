@@ -61,29 +61,27 @@
   <button onclick="copiarSenha()">Copiar Senha</button>
 
   <script>
-    async function carregarSenha() {
-      try {
-        const resposta = await fetch("/senha");
-        const texto = await resposta.text();
-
-        const senhaExtraida = texto.match(/<p>(.*?)<\/p>/);
-        const senha = senhaExtraida ? senhaExtraida[1] : "Nenhuma senha disponível";
-        document.getElementById("senha").innerText = senha;
-      } catch (err) {
-        document.getElementById("senha").innerText = "Erro ao carregar senha";
-      }
+  async function carregarSenha() {
+    try {
+      const resposta = await fetch("/api/senha");
+      const data = await resposta.json();
+      document.getElementById("senha").innerText = data.senha || "Nenhuma senha disponível";
+    } catch (err) {
+      document.getElementById("senha").innerText = "Erro ao carregar senha";
     }
+  }
 
-    function copiarSenha() {
-      const senha = document.getElementById("senha").innerText;
-      navigator.clipboard.writeText(senha).then(() => {
-        alert("Senha copiada para a área de transferência.");
-      });
-    }
+  function copiarSenha() {
+    const senha = document.getElementById("senha").innerText;
+    navigator.clipboard.writeText(senha).then(() => {
+      alert("Senha copiada para a área de transferência.");
+    });
+  }
 
-    carregarSenha();
-    setInterval(carregarSenha, 10000);
-  </script>
+  carregarSenha();
+  setInterval(carregarSenha, 10000);
+</script>
+
 
 </body>
 </html>
