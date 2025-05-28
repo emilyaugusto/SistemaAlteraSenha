@@ -14,7 +14,7 @@
     h1 {
       color: #b31313;
     }
-    
+
     .senha-box {
       margin-top: 40px;
       font-size: 20px;
@@ -63,7 +63,7 @@
   <script>
     async function carregarSenha() {
       try {
-        const resposta = await fetch("http://localhost:3000/senha");
+        const resposta = await fetch("/senha");
         const texto = await resposta.text();
 
         const senhaExtraida = texto.match(/<p>(.*?)<\/p>/);
@@ -81,10 +81,7 @@
       });
     }
 
-    // Atualiza ao carregar
     carregarSenha();
-
-    // Atualiza a cada 10 segundos
     setInterval(carregarSenha, 10000);
   </script>
 
