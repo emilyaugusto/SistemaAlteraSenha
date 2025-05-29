@@ -59,9 +59,3 @@ img {
 h1{
     font-size: 20px;
 }
-
-.atualizado {
-  border: 2px solid #13b33b;
-  box-shadow: 0 0 10px #13b33b;
-  transition: all 0.3s ease;
-}
