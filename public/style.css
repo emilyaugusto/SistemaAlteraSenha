@@ -65,6 +65,7 @@ input[type="password"] {
 
 input[type="password"]:focus {
     outline: none;
+    background-color: #e0e0e0;
 }
 
 button {

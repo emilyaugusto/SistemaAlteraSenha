@@ -8,23 +8,37 @@ body {
     padding-top: 100px;
 }
 
-.senha-box [type="password"] {
-    font-size: 16px;
+.senha-box {
+    width: 320px;
+    margin: 0 auto;
+    margin-top: 23px;
+}
+
+.senha {
+    font-size: 17px;
+    color: #717171;
+}
+
+.senha-box2 {
+    margin-top: 15px;
+}
+
+input[type="text"] {
+    font-size: 20px;
     border-radius: 10px;
     background-color: #EBEBEB;
-    border: 0px solid;
-    width: 320px;
-    margin-top: 35px;
+    border: none;
+    width: 290px;
+    padding: 10px 15px;
     font-family: 'Poppins', sans-serif;
-    padding: 10px 10px 10px 40px;
+    font-style: bold;
 }
 
-.senha-box [type="password"]:focus {
+input[type="text"]:focus {
     outline: none;
 }
-
 button {
-    margin-top: 15px;
+    margin-top: -15px;
     padding: 10px 20px;
     width: 320px;
     font-size: 16px;
@@ -40,11 +54,6 @@ img {
     width: 130px;
 }
 
-p{
-    margin-top: -10px;
-    color: #717171;
-}
-
-h2{
+h1{
     font-size: 20px;
 }

@@ -3,49 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <title>Painel de Suporte – Senha Recebida</title>
-  <link rel="icon" href="../imagens/Icon.png">
+  <link rel="icon" href="Icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link href="StyleAdmin.css" rel="stylesheet">
 </head>
 <body>
 
-  <h1>Painel de Suporte – Última Senha Recebida</h1>
+<h1>Painel de Suporte – Última Senha Recebida</h1>
 
-  <div class="senha-box">
-    <div class="senha" id="senha">Carregando...</div>
-  </div>
-  <br />
-   <div class="senha-box2">
-    <div class="senha2" id="senha2">Carregando...</div>
-  </div>
-  <br />
-  <button onclick="copiarSenha()">Copiar Senha</button>
-  <br />
+<div class="senha-box">
+  <div class="senha" id="mensagem">Aguardando mensagem...</div>
+</div>
+<br />
+<div class="senha-box2">
+  <input class="senha2" id="senhaInput" type="text" value="Carregando..." readonly />
+</div>
+<br />
+<button onclick="copiarSenha()">Copiar Senha</button>
+<br />
 
   <img src="../imagens/FeitalLogo.png" alt="Grupo Feital" />
 
   <script>
-  async function carregarSenha() {
+  async function carregarDados() {
     try {
       const resposta = await fetch("/api/senha");
       const data = await resposta.json();
-      document.getElementById("senha").innerText = data.senha || "Nenhuma senha disponível";
+
+      const dados = data.senha || "Nenhuma informação recebida";
+
+      if (dados.startsWith("senha:")) {
+        const senha = dados.replace("senha:", "").trim();
+        document.getElementById("senhaInput").type = "password";
+        document.getElementById("senhaInput").value = senha;
+        document.getElementById("mensagem").innerText = "Senha recebida:";
+      } else {
+        document.getElementById("senhaInput").type = "text";
+        document.getElementById("senhaInput").value = dados;
+        document.getElementById("mensagem").innerText = "Mensagem recebida:";
+      }
+
     } catch (err) {
-      document.getElementById("senha").innerText = "Erro ao carregar senha";
+      document.getElementById("mensagem").innerText = "Erro ao carregar dados";
+      document.getElementById("senhaInput").type = "text";
+      document.getElementById("senhaInput").value = "Erro";
     }
   }
 
   function copiarSenha() {
-    const senha = document.getElementById("senha").innerText;
+    const senha = document.getElementById("senhaInput").value;
     navigator.clipboard.writeText(senha).then(() => {
-      alert("Senha copiada para a área de transferência.");
+      alert("Conteúdo copiado para a área de transferência.");
     });
   }
 
-  carregarSenha();
-  setInterval(carregarSenha, 10000);
+  carregarDados();
+  setInterval(carregarDados, 10000);
 </script>
-
-
 </body>
 </html>
