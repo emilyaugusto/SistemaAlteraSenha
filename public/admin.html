@@ -33,41 +33,44 @@
   let senhaAtual = "";
   let senhaVisivel = false;
 
-  async function carregarDados() {
-    try {
-      const resposta = await fetch("/api/senha");
-      const data = await resposta.json();
+async function carregarDados() {
+  const input = document.getElementById("senhaInput");
+  const mensagem = document.getElementById("mensagem");
 
-      const senha = data.senha;
+  // Limpa o conteúdo anterior
+  input.type = "text";
+  input.value = "Carregando...";
+  mensagem.innerText = "Aguardando senha...";
 
-      const input = document.getElementById("senhaInput");
-      const mensagem = document.getElementById("mensagem");
+  try {
+    const resposta = await fetch("/api/senha");
+    const data = await resposta.json();
 
-      if (senha) {
-        if (senha !== senhaAtual) {
-          senhaAtual = senha;
+    const senha = data.senha;
 
-          input.type = "password";
-          input.value = senha;
-          mensagem.innerText = "Senha recebida";
-          senhaVisivel = true;
-        }
-      } else {
-        if (!senhaVisivel) {
-          input.type = "text";
-          input.value = "Nenhuma informação";
-          mensagem.innerText = "Aguardando senha...";
-        }
+    if (senha) {
+      if (senha !== senhaAtual) {
+        senhaAtual = senha;
+
+        input.type = "password";
+        input.value = senha;
+        mensagem.innerText = "Senha recebida";
+        senhaVisivel = true;
       }
-    } catch (err) {
-      const input = document.getElementById("senhaInput");
-      const mensagem = document.getElementById("mensagem");
-
-      input.type = "text";
-      input.value = "Erro";
-      mensagem.innerText = "Erro ao carregar dados";
+    } else {
+      if (!senhaVisivel) {
+        input.type = "text";
+        input.value = "Nenhuma informação";
+        mensagem.innerText = "Aguardando senha...";
+      }
     }
+  } catch (err) {
+    input.type = "text";
+    input.value = "Erro";
+    mensagem.innerText = "Erro ao carregar dados";
   }
+}
+
 
   function copiarSenha() {
     const input = document.getElementById("senhaInput");
