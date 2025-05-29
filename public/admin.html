@@ -30,19 +30,14 @@
       const resposta = await fetch("/api/senha");
       const data = await resposta.json();
 
-      const dados = data.senha || "Nenhuma informação recebida";
+      const dados = data.senha || "Nenhuma informação";
 
       if (dados.startsWith("senha:")) {
         const senha = dados.replace("senha:", "").trim();
         document.getElementById("senhaInput").type = "password";
         document.getElementById("senhaInput").value = senha;
-        document.getElementById("mensagem").innerText = "Senha recebida:";
-      } else {
-        document.getElementById("senhaInput").type = "text";
-        document.getElementById("senhaInput").value = dados;
-        document.getElementById("mensagem").innerText = "Mensagem recebida:";
-      }
-
+        document.getElementById("mensagem").innerText = "Senha recebida";
+      } 
     } catch (err) {
       document.getElementById("mensagem").innerText = "Erro ao carregar dados";
       document.getElementById("senhaInput").type = "text";
