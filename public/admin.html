@@ -62,6 +62,7 @@
     const senha = document.getElementById("senhaInput").value;
     navigator.clipboard.writeText(senha).then(() => {
       alert("Senha copiada para a área de transferência.");
+      document.getElementById("senhaInput").value = "";
     });
   }
 
