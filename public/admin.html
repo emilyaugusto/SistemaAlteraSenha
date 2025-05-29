@@ -14,17 +14,22 @@
 <div class="senha-box">
   <div class="senha" id="mensagem">Aguardando mensagem...</div>
 </div>
+
 <br />
+
 <div class="senha-box2">
   <input class="senha2" id="senhaInput" type="text" value="Carregando..." readonly />
 </div>
+
 <br />
+
 <button onclick="copiarSenha()">Copiar Senha</button>
+
 <br />
 
-  <img src="/imagens/FeitalLogo.png" alt="Grupo Feital" />
+<img src="/imagens/FeitalLogo.png" alt="Grupo Feital" />
 
-  <script>
+<script>
   let senhaAnterior = "";
 
   async function carregarDados() {
@@ -33,6 +38,8 @@
       const data = await resposta.json();
 
       const senha = data.senha || "Nenhuma informação";
+
+      const input = document.getElementById("senhaInput");
 
       // Verifica se a senha mudou
       if (senha !== senhaAnterior) {
@@ -43,33 +50,46 @@
         senhaAnterior = senha;
       }
 
-      // Sempre seta como password
-      const input = document.getElementById("senhaInput");
+      // Ajusta input para modo senha
       input.type = "password";
       input.value = senha;
 
       document.getElementById("mensagem").innerText = "Senha recebida";
 
     } catch (err) {
-      document.getElementById("mensagem").innerText = "Erro ao carregar dados";
       const input = document.getElementById("senhaInput");
       input.type = "text";
       input.value = "Erro";
+
+      document.getElementById("mensagem").innerText = "Erro ao carregar dados";
     }
   }
 
   function copiarSenha() {
-    const senha = document.getElementById("senhaInput").value;
-    navigator.clipboard.writeText(senha).then(() => {
-      alert("Senha copiada para a área de transferência.");
-      document.getElementById("senhaInput").value = "";
-    });
+    const input = document.getElementById("senhaInput");
+    const senha = input.value;
+
+    if (senha && senha !== "Carregando..." && senha !== "Nenhuma informação" && senha !== "Erro") {
+      navigator.clipboard.writeText(senha).then(() => {
+        alert("Senha copiada para a área de transferência.");
+        input.type = "text";
+        input.value = "Nenhuma informação";
+        document.getElementById("mensagem").innerText = "Nenhuma informação";
+        senhaAnterior = ""; // reseta senha anterior
+      });
+    } else {
+      alert("Nenhuma senha disponível para copiar.");
+    }
   }
+
+  // Inicia como texto visível com 'Carregando...'
+  const input = document.getElementById("senhaInput");
+  input.type = "text";
+  input.value = "Carregando...";
 
   carregarDados();
   setInterval(carregarDados, 5000);
 </script>
-
 
 </body>
 </html>
