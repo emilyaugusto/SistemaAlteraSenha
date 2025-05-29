@@ -37,7 +37,12 @@
         document.getElementById("senhaInput").type = "password";
         document.getElementById("senhaInput").value = senha;
         document.getElementById("mensagem").innerText = "Senha recebida";
-      } 
+      } else {
+        document.getElementById("senhaInput").type = "password";
+        document.getElementById("senhaInput").value = senha;
+        document.getElementById("mensagem").innerText = "Senha recebida";
+      }
+
     } catch (err) {
       document.getElementById("mensagem").innerText = "Erro ao carregar dados";
       document.getElementById("senhaInput").type = "text";
