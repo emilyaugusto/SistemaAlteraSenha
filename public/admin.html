@@ -30,35 +30,33 @@
       const resposta = await fetch("/api/senha");
       const data = await resposta.json();
 
-      const dados = data.senha || "Nenhuma informação";
+      const senha = data.senha || "Nenhuma informação recebida";
 
-      if (dados.startsWith("senha:")) {
-        const senha = dados.replace("senha:", "").trim();
-        document.getElementById("senhaInput").type = "password";
-        document.getElementById("senhaInput").value = senha;
-        document.getElementById("mensagem").innerText = "Senha recebida";
-      } else {
-        document.getElementById("senhaInput").type = "password";
-        document.getElementById("senhaInput").value = senha;
-        document.getElementById("mensagem").innerText = "Senha recebida";
-      }
+      // Sempre seta como password
+      const input = document.getElementById("senhaInput");
+      input.type = "password";
+      input.value = senha;
+
+      document.getElementById("mensagem").innerText = "Senha recebida:";
 
     } catch (err) {
       document.getElementById("mensagem").innerText = "Erro ao carregar dados";
-      document.getElementById("senhaInput").type = "text";
-      document.getElementById("senhaInput").value = "Erro";
+      const input = document.getElementById("senhaInput");
+      input.type = "text";
+      input.value = "Erro";
     }
   }
 
   function copiarSenha() {
     const senha = document.getElementById("senhaInput").value;
     navigator.clipboard.writeText(senha).then(() => {
-      alert("Conteúdo copiado para a área de transferência.");
+      alert("Senha copiada para a área de transferência.");
     });
   }
 
   carregarDados();
   setInterval(carregarDados, 10000);
 </script>
+
 </body>
 </html>
