@@ -25,19 +25,30 @@
   <img src="/imagens/FeitalLogo.png" alt="Grupo Feital" />
 
   <script>
+  let senhaAnterior = "";
+
   async function carregarDados() {
     try {
       const resposta = await fetch("/api/senha");
       const data = await resposta.json();
 
-      const senha = data.senha || "Nenhuma informação recebida";
+      const senha = data.senha || "Nenhuma informação";
+
+      // Verifica se a senha mudou
+      if (senha !== senhaAnterior) {
+        if (senhaAnterior !== "") {
+          location.reload(); // 🔄 Reload elegante apenas quando mudar
+          return;
+        }
+        senhaAnterior = senha;
+      }
 
       // Sempre seta como password
       const input = document.getElementById("senhaInput");
       input.type = "password";
       input.value = senha;
 
-      document.getElementById("mensagem").innerText = "Senha recebida:";
+      document.getElementById("mensagem").innerText = "Senha recebida";
 
     } catch (err) {
       document.getElementById("mensagem").innerText = "Erro ao carregar dados";
@@ -57,6 +68,7 @@
   carregarDados();
   setInterval(carregarDados, 10000);
 </script>
+
 
 </body>
 </html>
