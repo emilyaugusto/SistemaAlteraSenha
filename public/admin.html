@@ -56,7 +56,7 @@
         if (!senhaVisivel) {
           input.type = "text";
           input.value = "Nenhuma informação";
-          mensagem.innerText = "Nenhuma informação";
+          mensagem.innerText = "Aguardando senha...";
         }
       }
     } catch (err) {
@@ -79,23 +79,23 @@
         alert("Senha copiada para a área de transferência.");
         input.type = "text";
         input.value = "Nenhuma informação";
-        mensagem.innerText = "Nenhuma informação";
-        senhaAtual = "";
+        mensagem.innerText = "Aguardando senha...";
+        senhaAtual = null;
         senhaVisivel = false;
       });
     } else {
       alert("Nenhuma senha disponível para copiar.");
     }
   }
-
+  senhaAtual = null;
   // Inicializa como carregando
   const input = document.getElementById("senhaInput");
   input.type = "text";
   input.value = "Carregando...";
-  document.getElementById("mensagem").innerText = "Aguardando mensagem...";
+  document.getElementById("mensagem").innerText = "Aguardando senha...";
 
   carregarDados();
-  setInterval(carregarDados, 10000); // Atualiza a cada 10 segundos
+  setInterval(carregarDados, 5000); 
 </script>
 
 </body>
