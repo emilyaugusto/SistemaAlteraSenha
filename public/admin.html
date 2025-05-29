@@ -30,43 +30,48 @@
 <img src="/imagens/FeitalLogo.png" alt="Grupo Feital" />
 
 <script>
-  let senhaAnterior = "";
+  let senhaAtual = "";
+  let senhaVisivel = false;
 
   async function carregarDados() {
     try {
       const resposta = await fetch("/api/senha");
       const data = await resposta.json();
 
-      const senha = data.senha || "Nenhuma informação";
+      const senha = data.senha;
 
       const input = document.getElementById("senhaInput");
+      const mensagem = document.getElementById("mensagem");
 
-      // Verifica se a senha mudou
-      if (senha !== senhaAnterior) {
-        if (senhaAnterior !== "") {
-          location.reload(); // 🔄 Reload elegante apenas quando mudar
-          return;
+      if (senha) {
+        if (senha !== senhaAtual) {
+          senhaAtual = senha;
+
+          input.type = "password";
+          input.value = senha;
+          mensagem.innerText = "Senha recebida";
+          senhaVisivel = true;
         }
-        senhaAnterior = senha;
+      } else {
+        if (!senhaVisivel) {
+          input.type = "text";
+          input.value = "Nenhuma informação";
+          mensagem.innerText = "Nenhuma informação";
+        }
       }
-
-      // Ajusta input para modo senha
-      input.type = "password";
-      input.value = senha;
-
-      document.getElementById("mensagem").innerText = "Senha recebida";
-
     } catch (err) {
       const input = document.getElementById("senhaInput");
+      const mensagem = document.getElementById("mensagem");
+
       input.type = "text";
       input.value = "Erro";
-
-      document.getElementById("mensagem").innerText = "Erro ao carregar dados";
+      mensagem.innerText = "Erro ao carregar dados";
     }
   }
 
   function copiarSenha() {
     const input = document.getElementById("senhaInput");
+    const mensagem = document.getElementById("mensagem");
     const senha = input.value;
 
     if (senha && senha !== "Carregando..." && senha !== "Nenhuma informação" && senha !== "Erro") {
@@ -74,21 +79,23 @@
         alert("Senha copiada para a área de transferência.");
         input.type = "text";
         input.value = "Nenhuma informação";
-        document.getElementById("mensagem").innerText = "Nenhuma informação";
-        senhaAnterior = ""; // reseta senha anterior
+        mensagem.innerText = "Nenhuma informação";
+        senhaAtual = "";
+        senhaVisivel = false;
       });
     } else {
       alert("Nenhuma senha disponível para copiar.");
     }
   }
 
-  // Inicia como texto visível com 'Carregando...'
+  // Inicializa como carregando
   const input = document.getElementById("senhaInput");
   input.type = "text";
   input.value = "Carregando...";
+  document.getElementById("mensagem").innerText = "Aguardando mensagem...";
 
   carregarDados();
-  setInterval(carregarDados, 5000);
+  setInterval(carregarDados, 10000); // Atualiza a cada 10 segundos
 </script>
 
 </body>
