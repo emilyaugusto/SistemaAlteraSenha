@@ -30,47 +30,33 @@
 <img src="/imagens/FeitalLogo.png" alt="Grupo Feital" />
 
 <script>
-  let senhaAtual = "";
+  let senhaAtual = null;
   let senhaVisivel = false;
 
-async function carregarDados() {
-  const input = document.getElementById("senhaInput");
-  const mensagem = document.getElementById("mensagem");
+  async function carregarDados() {
+    const input = document.getElementById("senhaInput");
+    const mensagem = document.getElementById("mensagem");
 
-  // Limpa o conteúdo anterior
-  input.type = "text";
-  input.value = "Carregando...";
-  mensagem.innerText = "Aguardando senha...";
+    try {
+      const resposta = await fetch("/api/senha");
+      const data = await resposta.json();
 
-  try {
-    const resposta = await fetch("/api/senha");
-    const data = await resposta.json();
+      const novaSenha = data.senha;
 
-    const senha = data.senha;
-
-    if (senha) {
-      if (senha !== senhaAtual) {
-        senhaAtual = senha;
+      if (novaSenha && novaSenha !== senhaAtual) {
+        senhaAtual = novaSenha;
+        senhaVisivel = true;
 
         input.type = "password";
-        input.value = senha;
+        input.value = novaSenha;
         mensagem.innerText = "Senha recebida";
-        senhaVisivel = true;
       }
-    } else {
-      if (!senhaVisivel) {
-        input.type = "text";
-        input.value = "Nenhuma informação";
-        mensagem.innerText = "Aguardando senha...";
-      }
+    } catch (err) {
+      input.type = "text";
+      input.value = "Erro";
+      mensagem.innerText = "Erro ao carregar dados";
     }
-  } catch (err) {
-    input.type = "text";
-    input.value = "Erro";
-    mensagem.innerText = "Erro ao carregar dados";
   }
-}
-
 
   function copiarSenha() {
     const input = document.getElementById("senhaInput");
@@ -90,14 +76,22 @@ async function carregarDados() {
       alert("Nenhuma senha disponível para copiar.");
     }
   }
-  senhaAtual = null;
-  // Inicializa como carregando
-  const input = document.getElementById("senhaInput");
-  input.type = "text";
-  input.value = "Carregando...";
-  document.getElementById("mensagem").innerText = "Aguardando senha...";
 
-  carregarDados();
+  // Ao carregar a página, limpa os campos
+  window.onload = () => {
+    const input = document.getElementById("senhaInput");
+    const mensagem = document.getElementById("mensagem");
+
+    input.type = "text";
+    input.value = "Nenhuma informação";
+    mensagem.innerText = "Aguardando senha...";
+
+    // Chamada inicial
+    carregarDados();
+
+    // Atualiza a senha a cada 5 segundos
+    setInterval(carregarDados, 5000);
+  };
 </script>
 
 </body>
