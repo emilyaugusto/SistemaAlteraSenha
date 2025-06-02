@@ -30,69 +30,54 @@
 <img src="/imagens/FeitalLogo.png" alt="Grupo Feital" />
 
 <script>
-  let senhaAtual = null;
-  let senhaVisivel = false;
+  let intervaloAtualizacao;
 
-  async function carregarDados() {
-    const input = document.getElementById("senhaInput");
-    const mensagem = document.getElementById("mensagem");
+  async function buscarSenha() {
+    const response = await fetch('/api/senha');
+    const data = await response.json();
+    const inputSenha = document.getElementById('senhaRecebida');
+    inputSenha.value = data.senha;
+  }
 
-    try {
-      const resposta = await fetch("/api/senha");
-      const data = await resposta.json();
+  function iniciarAtualizacao() {
+    buscarSenha();
+    intervaloAtualizacao = setInterval(buscarSenha, 2000); // atualiza a cada 2 segundos
+  }
 
-      const novaSenha = data.senha;
-
-      if (novaSenha && novaSenha !== senhaAtual) {
-        senhaAtual = novaSenha;
-        senhaVisivel = true;
-
-        input.type = "password";
-        input.value = novaSenha;
-        mensagem.innerText = "Senha recebida";
-      }
-    } catch (err) {
-      input.type = "text";
-      input.value = "Erro";
-      mensagem.innerText = "Erro ao carregar dados";
-    }
+  function pararAtualizacao() {
+    clearInterval(intervaloAtualizacao);
   }
 
   function copiarSenha() {
-    const input = document.getElementById("senhaInput");
-    const mensagem = document.getElementById("mensagem");
-    const senha = input.value;
-
-    if (senha && senha !== "Carregando..." && senha !== "Nenhuma informação" && senha !== "Erro") {
-      navigator.clipboard.writeText(senha).then(() => {
-        alert("Senha copiada para a área de transferência.");
-        input.type = "text";
-        input.value = "Nenhuma informação";
-        mensagem.innerText = "Aguardando senha...";
-        senhaAtual = null;
-        senhaVisivel = false;
-      });
-    } else {
-      alert("Nenhuma senha disponível para copiar.");
-    }
+    const inputSenha = document.getElementById('senhaRecebida');
+    navigator.clipboard.writeText(inputSenha.value).then(() => {
+      document.getElementById('mensagem').innerText = 'Senha copiada!';
+      inputSenha.value = '';
+      pararAtualizacao(); // Para de atualizar depois de copiar
+    });
   }
 
-  // Ao carregar a página, limpa os campos
-  window.onload = () => {
-    const input = document.getElementById("senhaInput");
-    const mensagem = document.getElementById("mensagem");
+  // Abre o popup
+  function abrirPopup() {
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
 
-    input.type = "text";
-    input.value = "Nenhuma informação";
-    mensagem.innerText = "Aguardando senha...";
+  // Fecha o popup
+  function fecharPopup() {
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  }
 
-    // Chamada inicial
-    carregarDados();
+  document.getElementById('overlay').addEventListener('click', fecharPopup);
 
-    // Atualiza a senha a cada 5 segundos
-    setInterval(carregarDados, 5000);
-  };
+  function irParaAdmin() {
+    window.location.href = "/admin";
+  }
+
+  window.onload = iniciarAtualizacao;
 </script>
+
 
 </body>
 </html>
